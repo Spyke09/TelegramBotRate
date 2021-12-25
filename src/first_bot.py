@@ -1,15 +1,26 @@
-import telegram
+from telegram.ext import Updater
 import site_parsing
+import logging
+from telegram.ext import CommandHandler
+
+
+
+def start(update, context):
+    # `bot.send_message` это метод Telegram API
+    # `update.effective_chat.id` - определяем `id` чата,
+    # откуда прилетело сообщение
+    context.bot.send_message(chat_id=update.effective_chat.id,
+                             text="I'm a bot, please talk to me!")
+
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 TOKEN = '1797743243:AAH8TG5ZApBA1eLmP3qsPYNVltU3jzw4OKg'
-bot = telegram.Bot(token=TOKEN)
+updater = Updater(token=TOKEN, use_context=True)
 
-for k, t in enumerate(times):
-    if t.split()[0] == yesterday_str:  # если новость за вчера, то постим
-        # Непосредственно здесь идет отправка. Инициализируем бота с помощью токена
-        bot = telegram.Bot(token='123456789:AABBCCDDefgh_mnaviwuue_DP865Y')
-        chat_id = '@here_some_channel_to_post'
-        # тест новости
-        chat_text = 'Новая новость на <a href="http://здесь-урл-сайта.ru">сайте</a>:\n <b>{}</b>'.format(h2s[k])
-        # отправка поста в канал. Маленькая тонкость - используется HTML разметка
-        bot.send_message(chat_id=chat_id, text=chat_text, parse_mode=telegram.ParseMode.HTML)
+dispatcher = updater.dispatcher
+
+start_handler = CommandHandler('start', start)
+dispatcher.add_handler(start_handler)
+updater.start_polling()
+
