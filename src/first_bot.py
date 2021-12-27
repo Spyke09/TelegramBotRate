@@ -2,15 +2,12 @@ from telegram.ext import Updater
 import site_parsing
 import logging
 from telegram.ext import CommandHandler
-
+from time import sleep
 
 
 def start(update, context):
-    # `bot.send_message` это метод Telegram API
-    # `update.effective_chat.id` - определяем `id` чата,
-    # откуда прилетело сообщение
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="I'm a bot, please talk to me!")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Начало работы")
+
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -23,4 +20,11 @@ dispatcher = updater.dispatcher
 start_handler = CommandHandler('start', start)
 dispatcher.add_handler(start_handler)
 updater.start_polling()
+site_parsing.create_json()
+while 1:
+    sleep(5)
+    a = site_parsing.check()
+    if a:
+        for i in a:
+            context.bot.send_message(chat_id=update.effective_chat.id, text="Начало работы")
 

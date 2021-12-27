@@ -1,8 +1,9 @@
+import json
 import requests
 from bs4 import BeautifulSoup
 
 
-def search_scores(name: str) -> dict:
+def search_scores(name: str = 'Романов Александр Дмитриевич') -> dict:
     r = requests.get(
         'https://rating.unecon.ru/index.php?&y=2020&k=1&f=1&up=12475&s=3&uy=2&g=all&upp=all&ball=hide&sort=fio')
 
@@ -22,8 +23,30 @@ def search_scores(name: str) -> dict:
     return dict()
 
 
-if __name__ == '__main__':
-    result = search_scores('Романов Александр Дмитриевич')
-    for i, j in result.items():
-        print(f"{i}: {j}")
+def create_json():
+    data = search_scores()
+    with open("data_file.json", "w") as write_file:
+        json.dump(data, write_file)
 
+
+def update_json(data):
+    with open("data_file.json", "w") as write_file:
+        json.dump(data, write_file)
+
+
+def check_and_update():
+    data = search_scores()
+    with open("data_file.json") as write_file:
+        new_data = json.load(write_file)
+        res = []
+        for i in data:
+            if data[i] != new_data[i]:
+                res.append(i+f": {data[i]} -> {new_data[i]}")
+        if not res:
+            res.append('nothing')
+        else:
+            update_json(new_data)
+    return res
+
+if __name__ == '__main__':
+    print(check_and_update())
