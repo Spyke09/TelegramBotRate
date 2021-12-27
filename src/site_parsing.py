@@ -35,9 +35,9 @@ def update_json(data):
 
 
 def check_and_update():
-    data = search_scores()
+    new_data = search_scores()
     with open("data_file.json") as write_file:
-        new_data = json.load(write_file)
+        data = json.load(write_file)
         res = []
         for i in data:
             if data[i] != new_data[i]:
