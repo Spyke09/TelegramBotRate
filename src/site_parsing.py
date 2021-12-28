@@ -41,12 +41,11 @@ def check_and_update():
         res = []
         for i in data:
             if data[i] != new_data[i]:
-                res.append(i+f": {data[i]} -> {new_data[i]}")
-        if not res:
-            res.append('nothing')
-        else:
+                res.append(i+f": {data[i]}=>{new_data[i]}")
+        if res:
             update_json(new_data)
     return res
+
 
 if __name__ == '__main__':
     print(check_and_update())
